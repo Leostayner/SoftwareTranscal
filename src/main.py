@@ -15,7 +15,7 @@ temperatura2 = [0]
 
 fourier = 0
 
-difusidadeTermica = 1 #cm2/s
+#difusidadeTermica = 1 #cm2/s
 
 
 def numeroFourier():

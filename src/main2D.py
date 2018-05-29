@@ -2,9 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 alfa = 1
-Npontos = 35
+Npontos = 10
 tTotal = 100
-condInicial = 20
+condInicial = 0
 comprimento = 50 #cm
 
 delta_X = comprimento / Npontos
@@ -12,55 +12,44 @@ delta_T = 1
 
 temperatura2 = [0]
 
-
 fourier = 0
 
-difusidadeTermica = 1 #cm2/s
+#difusidadeTermica = 1 #cm2/s
 
 
 def numeroFourier():
     return (alfa * delta_T) / pow(delta_X, 2)
 
-def criar_vetor_T():
-    temperatura = []
-    temperatura.append(0)
-    for i in range(Npontos-2):
-        temperatura.append(condInicial)
-    temperatura.append(0)
-    print(len(temperatura))
+def criar_matriz_T(n, s, l, o):
+    temperatura = np.zeros((Npontos, Npontos)).tolist()
+
+    for i in range(Npontos):
+        temperatura[i][0] = o
+        temperatura[i][Npontos-1] = l
+        temperatura[Npontos-1][i] = s
+        temperatura[0][i] = n
+
+#    print(temperatura)
     return temperatura
 
-def criar_vetor_P():
-    posicao = []
-    pos = comprimento/Npontos
-    temp = pos
-    for i in range(Npontos):
-        posicao.append(pos)
-        pos+=temp
-    print(len(posicao))
-    return posicao
 
 def main():
-    temperatura2 = [0]
-    temperatura = criar_vetor_T()
-    posicao = criar_vetor_P()
+    temperatura2 = criar_matriz_T(100, 0, 50, 75)
+    temperatura = criar_matriz_T(100, 0, 50, 75)
     fourier = numeroFourier()
     print(fourier)
     if (fourier > 0.5):
         print("Sem solucao para o sistema")
         return
-    for i in range(tTotal):
-        
-        for j in range(1, Npontos - 1):
-            temp =( fourier * (temperatura[j + 1] + temperatura[j - 1]) + (1 - (2 * fourier) ) * temperatura[j])
-            temperatura2.append(temp)
-        temperatura2.append(0)
-        temperatura = temperatura2[:]
-        temperatura2=[0]
-    plt.plot(posicao, temperatura)
-    plt.xlabel("Posição")
-    plt.ylabel("Temperatura")
-    plt.title("{} segundos".format(i) )
+    for t in range(tTotal):
+        for i in range(1, Npontos - 1):
+            for j in range(1, Npontos - 1):
+                temp = ( fourier * (temperatura[i + 1][j] + temperatura[i-1][j] + temperatura[i][j+1] + temperatura[i][j - 1]) + (1 - (4 * fourier) ) * temperatura[i][j])
+                temperatura2[i][j]= (temp)
+            
+        temperatura = temperatura2[:][:]
+            
+    plt.imshow(temperatura)
     plt.show()
 
 main()
