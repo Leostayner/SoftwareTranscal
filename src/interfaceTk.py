@@ -50,7 +50,7 @@ class Janela_Principal():
         filemenu = tk.Menu(menubar, tearoff = 0)
         editmenu = tk.Menu(menubar, tearoff=0)
         
-        filemenu.add_command(label="New")
+        filemenu.add_command(label="New", command = self.newFile)
         filemenu.add_command(label="Open", command = self.openFile)
         filemenu.add_command(label="Save", command = self.saveFile)
         filemenu.add_command(label="Save As", command = self.saveAsFile)
@@ -77,7 +77,8 @@ class Janela_Principal():
         #Iniciar menu
         self.menu_principal.mostrar()
 
-       
+    def newFile(self):
+        self.menu_principal.mostrar()       
 
     def openFile(self):
         fileName = filedialog.askopenfilename()
@@ -88,7 +89,7 @@ class Janela_Principal():
         self.tTotal = read.tTotal
         self.condInicial = read.condInicial
         self.comprimento = read.comprimento
-        self.deltaT
+        self.deltaT = read.deltaT
         
         main.Main_1D(self.alfa, self.Npontos, self.tTotal, self.condInicial, self.comprimento,self.janela_principal.deltaT)
 
@@ -117,6 +118,17 @@ class Menu_Principal():
         self.window1 = tk.Frame(self.janela_principal.window)
         self.window1.grid(row = 0, column = 0, sticky = "nsew")
         
+
+        self.janela_principal.alfa          = 0
+        self.janela_principal.Npontos       = 0
+        self.janela_principal.tTotal        = 0
+        self.janela_principal.condInicial   = 0
+        self.janela_principal.comprimento   = 0
+        self.janela_principal.deltaT        = 0
+        self.janela_principal.A1            = 0
+        self.janela_principal.A2            = 0
+        self.janela_principal.A3            = 0
+        self.janela_principal.A4            = 0
 
         
 
