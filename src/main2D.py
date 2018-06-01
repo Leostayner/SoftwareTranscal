@@ -4,23 +4,25 @@ from matplotlib.widgets import Slider
 
 class Main_2D():
 
-    def __init__(self):
-        self.alfa = 1
-        self.Npontos = 10
-        self. tTotal = 100
-        self.condInicial = 0
-        self.comprimento = 50 #cm
+    def __init__(self, alfa, Npontos, tTotal, condInicial, comprimento, deltaT, A1, A2, A3, A4):
+        self.alfa = alfa
+        self.Npontos = Npontos
+        self. tTotal = tTotal
+        self.condInicial = condInicial
+        self.comprimento = comprimento
 
         self.delta_X = self.comprimento / self.Npontos
-        self.delta_T = 1
+        self.delta_T = deltaT
 
         self.temperatura2 = [0]
 
         self.fourier = 0
 
-        self.temperatura2 = self.criar_matriz_T(100, 0, 50, 75)
-        self.temperatura = self.criar_matriz_T(100, 0, 50, 75)
+        self.temperatura2 = self.criar_matriz_T(A1, A2, A3, A4)
+        self.temperatura = self.criar_matriz_T(A1, A2, A3, A4)
         self.fourier = self.numeroFourier()
+
+        self.main()
         
 
     def numeroFourier(self):

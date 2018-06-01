@@ -351,6 +351,7 @@ class Form2D_window():
 
 
     def confirmar(self):
+        print("Esou quia")
         self.janela_principal.alfa          = self.varAlfa.get()
         self.janela_principal.Npontos       = self.varNpontos.get()
         self.janela_principal.tTotal        = self.varTtotal.get()
@@ -362,12 +363,11 @@ class Form2D_window():
         self.janela_principal.A3            = self.varA3.get()
         self.janela_principal.A4            = self.varA4.get()
 
-
-
-
-        main.Main_2D(self.janela_principal.alfa, self.janela_principal.Npontos, 
+        main2D.Main_2D(self.janela_principal.alfa, self.janela_principal.Npontos, 
                      self.janela_principal.tTotal, self.janela_principal.condInicial,
-                     self.janela_principal.comprimento,self.janela_principal.deltaT)
+                     self.janela_principal.comprimento, self.janela_principal.deltaT,
+                     self.janela_principal.A1, self.janela_principal.A2,
+                     self.janela_principal.A3, self.janela_principal.A4)
 
 
     def mostrar(self):
