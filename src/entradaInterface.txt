@@ -1,3 +1,6 @@
+*TIPO
+1
+
 *ALFA
 1
 
@@ -12,3 +15,6 @@
 
 *COMPRIMENTO
 50
+
+*DELTA_T
+1

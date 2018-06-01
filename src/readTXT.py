@@ -1,4 +1,3 @@
-
 class ArquivoTXT():
 
     def __init__(self, nome):
@@ -9,14 +8,17 @@ class ArquivoTXT():
         self.comprimento = 0
         self.deltaT = 0
         self.lerArquivo(nome)
-        #self.status()
+        self.tA1 = 0
+        self.tA2 = 0
+        self.tA3 = 0
+        self.tA4 = 0
+        self.status()
         
     def lerArquivo(self, nome):
         arquivo = open(nome, "r")
-        tags = ["*ALFA","*NUMERO_PONTOS","*TEMPO_TOTAL","*CONDICAO_INICIAL",
-                "*COMPRIMENTO","*DELTA_T"]
+        tags = ["*TIPO","*ALFA","*NUMERO_PONTOS","*TEMPO_TOTAL","*CONDICAO_INICIAL",
+                "*COMPRIMENTO","*DELTA_T","*TEMPERATURA_A1","*TEMPERATURA_A2","*TEMPERATURA_A3","*TEMPERATURA_A4"]
 
-        flag = ""
 
         for linha in arquivo:
             linha = linha.replace('\n',"")
@@ -26,8 +28,11 @@ class ArquivoTXT():
                 if (linha[0] == "*"):
                     flag = linha
                 
-                else: 
-                    if(flag == "*ALFA"):
+                else:
+                    if(flag == "*TIPO"):
+                        self.tipo = int(linha)
+                     
+                    elif(flag == "*ALFA"):
                         self.alfa = int(linha)
                     
                     elif(flag == "*NUMERO_PONTOS"):
@@ -43,14 +48,30 @@ class ArquivoTXT():
                         self.comprimento = int(linha)
                     
                     elif(flag == "*DELTA_T"):
-                        self.deltaT = int(linha)    
+                        self.deltaT = int(linha)
 
                     
+                    elif(self.tipo == 2):
+
+                        if(flag == "*TEMPERATURA_A1"):
+                           self.tA1 = int(linha)
+                     
+                        elif(flag == "*TEMPERATURA_A2"):
+                            self.tA2 = int(linha)
+                        
+                        elif(flag == "*TEMPERATURA_A3"):
+                            self.tA3 = int(linha)
+
+                        elif(flag == "*TEMPERATURA_A4"):
+                            self.tA4 = int(linha)                    
+                
         arquivo.close()
 
     def status(self):
+        print("Tipo: {0}".format(self.tipo))
         print("Alfa: {0} ".format(self.alfa))
         print("Numero de Pontos: {0}".format(self.Npontos))
         print("Tempo Total: {0}".format(self.tTotal))
         print("Condição Inicial: {0}".format(self.condInicial))
         print("Comprimento: {0}".format(self.comprimento))
+        print("DeltaT: {0}".format(self.deltaT))

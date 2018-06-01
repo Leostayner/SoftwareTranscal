@@ -33,16 +33,17 @@ class Janela_Principal():
         self.window.columnconfigure(0, minsize = window_height)
         
         #Variaveis
+        self.tipo           = 0
         self.alfa           = 0
         self.Npontos        = 0
         self.tTotal         = 0
         self.condInicial    = 0
         self.comprimento    = 0
         self.deltaT         = 0
-        self.A1             = 0
-        self.A2             = 0
-        self.A3             = 0
-        self.A4             = 0
+        self.tA1            = 0
+        self.tA2            = 0
+        self.tA3            = 0
+        self.tA4            = 0
 
         #Menu
         menubar = tk.Menu(self.window)
@@ -81,30 +82,50 @@ class Janela_Principal():
         self.menu_principal.mostrar()       
 
     def openFile(self):
-        fileName = filedialog.askopenfilename()
+        self.fileName = filedialog.askopenfilename()
 
-        read = readTXT.ArquivoTXT(fileName)
+        read = readTXT.ArquivoTXT(self.fileName)
+        self.tipo = read.tipo
         self.alfa = read.alfa
         self.Npontos = read.Npontos
         self.tTotal = read.tTotal
         self.condInicial = read.condInicial
         self.comprimento = read.comprimento
         self.deltaT = read.deltaT
-        
-        main.Main_1D(self.alfa, self.Npontos, self.tTotal, self.condInicial, self.comprimento,self.janela_principal.deltaT)
+        self.tA1 = read.tA1
+        self.tA2 = read.tA2
+        self.tA3 = read.tA3
+        self.tA4 = read.tA4
 
+        if(self.tipo == 1):
+            self.mostrar_form1D()
+            main.Main_1D(self.alfa, self.Npontos,
+                        self.tTotal, self.condInicial,
+                        self.comprimento,self.deltaT)
+        
+        elif(self.tipo == 2):
+            self.mostrar_form2D()
+
+            main2D.Main_2D(self.alfa, self.Npontos, 
+                           self.tTotal, self.condInicial,
+                           self.comprimento, self.deltaT,
+                           self.tA1, self.tA2,
+                           self.tA3, self.tA4)
+   
     def saveFile(self):
         print("save")
     
     def saveAsFile(self):
-        fileName = filedialog.asksaveasfilename()
-        writeTXT.ArquivoTXT(self.alfa, self.Npontos, self.tTotal, self.condInicial, self.comprimento, fileName)
+        self.fileName = filedialog.asksaveasfilename()
+        writeTXT.ArquivoTXT(self.alfa, self.Npontos, self.tTotal, self.condInicial, self.comprimento, self.fileName)
 
 
     def mostrar_form1D(self):
+        self.tipo = 1
         self.form1D_window.mostrar()
         
     def mostrar_form2D(self):
+        self.tipo = 2
         self.form2D_window.mostrar()
         
     def iniciar(self):
@@ -131,7 +152,6 @@ class Menu_Principal():
         self.janela_principal.A4            = 0
 
         
-
     def mostrar(self):
         self.window1.tkraise()
 
@@ -358,16 +378,16 @@ class Form2D_window():
         self.janela_principal.condInicial   = self.varCondInicial.get()
         self.janela_principal.comprimento   = self.varComprimento.get()
         self.janela_principal.deltaT        = self.varDeltaT.get()
-        self.janela_principal.A1            = self.varA1.get()
-        self.janela_principal.A2            = self.varA2.get()
-        self.janela_principal.A3            = self.varA3.get()
-        self.janela_principal.A4            = self.varA4.get()
+        self.janela_principal.tA1            = self.varA1.get()
+        self.janela_principal.tA2            = self.varA2.get()
+        self.janela_principal.tA3            = self.varA3.get()
+        self.janela_principal.tA4            = self.varA4.get()
 
         main2D.Main_2D(self.janela_principal.alfa, self.janela_principal.Npontos, 
                      self.janela_principal.tTotal, self.janela_principal.condInicial,
                      self.janela_principal.comprimento, self.janela_principal.deltaT,
-                     self.janela_principal.A1, self.janela_principal.A2,
-                     self.janela_principal.A3, self.janela_principal.A4)
+                     self.janela_principal.tA1, self.janela_principal.tA2,
+                     self.janela_principal.tA3, self.janela_principal.tA4)
 
 
     def mostrar(self):
