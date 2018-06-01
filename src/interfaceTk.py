@@ -33,6 +33,7 @@ class Janela_Principal():
         self.window.columnconfigure(0, minsize = window_height)
         
         #Variaveis
+        self.fileName       = ""
         self.tipo           = 0
         self.alfa           = 0
         self.Npontos        = 0
@@ -82,7 +83,7 @@ class Janela_Principal():
         self.menu_principal.mostrar()       
 
     def openFile(self):
-        self.fileName = filedialog.askopenfilename()
+        self.fileName = filedialog.askopenfilename(filetypes=(("text files", "*.txt"), ("all files", "*.*")))
 
         read = readTXT.ArquivoTXT(self.fileName)
         self.tipo = read.tipo
@@ -105,7 +106,7 @@ class Janela_Principal():
         
         elif(self.tipo == 2):
             self.mostrar_form2D()
-
+           
             main2D.Main_2D(self.alfa, self.Npontos, 
                            self.tTotal, self.condInicial,
                            self.comprimento, self.deltaT,
@@ -113,12 +114,23 @@ class Janela_Principal():
                            self.tA3, self.tA4)
    
     def saveFile(self):
-        print("save")
-    
+        if (self.fileName == ""):
+            self.saveAsFile()
+        
+        else:
+            writeTXT.ArquivoTXT(self.tipo,self.alfa, self.Npontos, 
+                            self.tTotal, self.condInicial,
+                            self.comprimento, self.deltaT,
+                            self.tA1, self.tA2,
+                            self.tA3, self.tA4,self.fileName)
+        
     def saveAsFile(self):
-        self.fileName = filedialog.asksaveasfilename()
-        writeTXT.ArquivoTXT(self.alfa, self.Npontos, self.tTotal, self.condInicial, self.comprimento, self.fileName)
-
+        self.fileName = filedialog.asksaveasfilename(defaultextension=".txt")
+        writeTXT.ArquivoTXT(self.tipo,self.alfa, self.Npontos, 
+                            self.tTotal, self.condInicial,
+                            self.comprimento, self.deltaT,
+                            self.tA1, self.tA2,
+                            self.tA3, self.tA4,self.fileName)
 
     def mostrar_form1D(self):
         self.tipo = 1
@@ -371,7 +383,6 @@ class Form2D_window():
 
 
     def confirmar(self):
-        print("Esou quia")
         self.janela_principal.alfa          = self.varAlfa.get()
         self.janela_principal.Npontos       = self.varNpontos.get()
         self.janela_principal.tTotal        = self.varTtotal.get()
