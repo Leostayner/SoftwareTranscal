@@ -1,66 +1,98 @@
+from matplotlib.widgets import Slider
 import matplotlib.pyplot as plt
 import numpy as np
+import readTXT
 
-alfa = 1
-Npontos = 35
-tTotal = 100
-condInicial = 20
-comprimento = 50 #cm
+class Main_1D():
 
-delta_X = comprimento / Npontos
-delta_T = 1
+    def __init__(self, alfa, Npontos, tTotal, condInicial, comprimento,delta_T):
+        self.alfa = alfa
+        self.Npontos = Npontos
+        self.tTotal = tTotal
+        self.condInicial = condInicial
+        self.comprimento = comprimento
 
-temperatura2 = [0]
+        self.delta_X = self.comprimento / self.Npontos
+        self.delta_T = delta_T
 
+        self.temperaturaTemp = [0]
+        self.posicao = self.criar_vetor_P()
+        self.fourier = self.numeroFourier()
 
-fourier = 0
+        self.main()
 
-#difusidadeTermica = 1 #cm2/s
-
-
-def numeroFourier():
-    return (alfa * delta_T) / pow(delta_X, 2)
-
-def criar_vetor_T():
-    temperatura = []
-    temperatura.append(0)
-    for i in range(Npontos-2):
-        temperatura.append(condInicial)
-    temperatura.append(0)
-    print(len(temperatura))
-    return temperatura
-
-def criar_vetor_P():
-    posicao = []
-    pos = comprimento/Npontos
-    temp = pos
-    for i in range(Npontos):
-        posicao.append(pos)
-        pos+=temp
-    print(len(posicao))
-    return posicao
-
-def main():
-    temperatura2 = [0]
-    temperatura = criar_vetor_T()
-    posicao = criar_vetor_P()
-    fourier = numeroFourier()
-    print(fourier)
-    if (fourier > 0.5):
-        print("Sem solucao para o sistema")
-        return
-    for i in range(tTotal):
+    def calcular(self):
+        self.temperatura = self.criar_vetor_T()
         
-        for j in range(1, Npontos - 1):
-            temp =( fourier * (temperatura[j + 1] + temperatura[j - 1]) + (1 - (2 * fourier) ) * temperatura[j])
-            temperatura2.append(temp)
-        temperatura2.append(0)
-        temperatura = temperatura2[:]
-        temperatura2=[0]
-    plt.plot(posicao, temperatura)
-    plt.xlabel("Posição")
-    plt.ylabel("Temperatura")
-    plt.title("{} segundos".format(i) )
-    plt.show()
 
-main()
+        if (self.fourier > 0.5):
+            print("Sem solucao para o sistema")
+            return
+
+        for i in range(self.tTotal):
+            
+            for j in range(1, self.Npontos - 1):
+                temp =( self.fourier * (self.temperatura[j + 1] + self.temperatura[j - 1]) + (1 - (2 * self.fourier) ) * self.temperatura[j])
+                self.temperaturaTemp.append(temp)
+            
+            self.temperaturaTemp.append(0)
+            self.temperatura  = self.temperaturaTemp[:]
+            self.temperaturaTemp = [0]
+            
+
+    def criar_vetor_T(self):
+        temperatura = []
+        temperatura.append(0)
+        for i in range(self.Npontos-2):
+            temperatura.append(self.condInicial)
+        temperatura.append(0)
+        return temperatura
+
+    def criar_vetor_P(self):
+        posicao = []
+        pos = self.comprimento/self.Npontos
+        temp = pos
+        for i in range(self.Npontos):
+            posicao.append(pos)
+            pos+=temp
+        return posicao
+
+    def numeroFourier(self):
+        return (self.alfa * self.delta_T) / pow(self.delta_X, 2)
+
+
+    def faixaTemperatura(self):
+        self.temperaturaMin = 10000
+        self.temperaturaMax = 0
+        
+        for i in(self.temperatura):
+            if(i < self.temperaturaMin):
+                self.min = i 
+            
+            if(i > self.temperaturaMax):
+                self.max = i
+
+    def myplot(self):        
+        self.fig,self.ax = plt.subplots()
+        
+        plt.subplots_adjust(left=0.25, bottom=0.25)
+        self.plotLabel, = plt.plot(self.posicao, self.temperatura, lw=2, color='red')
+       
+        pos = plt.axes([0.25, 0.15, 0.65, 0.03])
+        mySlider = Slider(pos, 'Tempo', 1, self.tTotal, valinit = self.tTotal, valstep = 1, valfmt='%1d')        
+    
+        mySlider.on_changed(self.update)
+        plt.show()
+
+
+    def update(self, value):
+        intValue = int(value)
+        self.tTotal = intValue  
+        self.calcular()
+        self.plotLabel.set_data(self.posicao,self.temperatura)
+        self.fig.canvas.draw_idle()
+
+    def main(self):
+        self.calcular()
+        self.myplot()
+        
