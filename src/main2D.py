@@ -18,8 +18,13 @@ class Main_2D():
 
         self.fourier = 0
 
-        self.temperatura2 = self.criar_matriz_T(A1, A2, A3, A4)
-        self.temperatura = self.criar_matriz_T(A1, A2, A3, A4)
+        self.A1 = A1
+        self.A2 = A2
+        self.A3 = A3
+        self.A4 = A4
+
+        self.temperatura2 = self.criar_matriz_T(self.A1, self.A2, self.A3, self.A4)
+        self.temperatura = self.criar_matriz_T(self.A1, self.A2, self.A3, self.A4)
         self.fourier = self.numeroFourier()
 
         self.main()
@@ -40,8 +45,8 @@ class Main_2D():
         return temperatura
 
     def calcular(self):
-        self.temperatura = self.criar_matriz_T(100, 0, 50, 75)
-
+        self.temperatura = self.criar_matriz_T(self.A1, self.A2, self.A3, self.A4)
+        
         if (self.fourier > 0.5):
             print("Sem solucao para o sistema")
             return
@@ -53,7 +58,7 @@ class Main_2D():
                     self.temperatura2[i][j]= (temp)
                 
             self.temperatura = self.temperatura2[:][:]
-            self.temperatura2 = self.criar_matriz_T(100, 0, 50, 75)
+            self.temperatura2 = self.criar_matriz_T(self.A1, self.A2, self.A3, self.A4)
                 
     def myplot(self):        
         self.fig, self.ax = plt.subplots()
