@@ -65,16 +65,9 @@ class Janela_Principal():
         menubar.add_cascade(label="Edit", menu=editmenu)
 
         self.window.configure(menu = menubar)
-
-            
+    
         #Menu Principal
         self.menu_principal = Menu_Principal(self)
-    
-        #Form1D
-        self.form1D_window = Form1D_window(self)
-        
-        #Form2D
-        self.form2D_window = Form2D_window(self)
         
         #Iniciar menu
         self.menu_principal.mostrar()
@@ -133,10 +126,14 @@ class Janela_Principal():
                             self.tA3, self.tA4,self.fileName)
 
     def mostrar_form1D(self):
+        self.form1D_window = Form1D_window(self)
+        
         self.tipo = 1
         self.form1D_window.mostrar()
         
     def mostrar_form2D(self):
+        self.form2D_window = Form2D_window(self)
+        
         self.tipo = 2
         self.form2D_window.mostrar()
         
@@ -151,7 +148,7 @@ class Menu_Principal():
         self.window1 = tk.Frame(self.janela_principal.window)
         self.window1.grid(row = 0, column = 0, sticky = "nsew")
         
-
+        
         self.janela_principal.alfa          = 0
         self.janela_principal.Npontos       = 0
         self.janela_principal.tTotal        = 0
@@ -174,7 +171,7 @@ class Form1D_window():
         self.janela_principal = janela_principal
         self.window2 = tk.Frame(self.janela_principal.window)
         self.window2.grid(row = 0, column = 0, sticky = "nsew")
-        
+        #self.window2 = tk.Tk()
         
         self.window2.columnconfigure(0, minsize = (self.janela_principal.app_config['width'] / 2) )
         self.window2.columnconfigure(1, minsize = (self.janela_principal.app_config['width'] / 4) )
@@ -197,6 +194,8 @@ class Form1D_window():
 
 
         self.varComprimento = tk.IntVar()
+        self.varComprimento.set( self.janela_principal.comprimento)
+
         self.entryComprimento = tk.Entry(self.window2, background = "white", textvariable = self.varComprimento)
         self.entryComprimento.grid(row = 0, column = 2)
 
@@ -206,6 +205,8 @@ class Form1D_window():
         self.labelCondInicial.grid(row = 1, column = 1, sticky = "w")
 
         self.varCondInicial = tk.IntVar()
+        self.varCondInicial.set( self.janela_principal.condInicial)
+
         self.entryCondInicial = tk.Entry(self.window2, background = "white", textvariable = self.varCondInicial)
         self.entryCondInicial.grid(row = 1, column = 2)
 
@@ -215,6 +216,8 @@ class Form1D_window():
         self.labelNpontos.grid(row = 2, column = 1, sticky = "w")
 
         self.varNpontos = tk.IntVar()
+        self.varNpontos.set( self.janela_principal.Npontos)
+
         self.entryNpontos = tk.Entry(self.window2, background = "white", textvariable = self.varNpontos)
         self.entryNpontos.grid(row = 2, column = 2)
 
@@ -226,15 +229,19 @@ class Form1D_window():
         self.labelAlfa.grid(row = 3, column = 1,sticky = "w" )
 
         self.varAlfa = tk.IntVar()
+        self.varAlfa.set( self.janela_principal.alfa)
+
         self.entryAlfa = tk.Entry(self.window2, background = "white", textvariable = self.varAlfa)
         self.entryAlfa.grid(row = 3, column = 2)
 
-
+        
         self.labelTtotal = tk.Label(self.window2)
         self.labelTtotal.configure(text = "T Total:")
         self.labelTtotal.grid(row = 4, column = 1,sticky = "w")
 
         self.varTtotal = tk.IntVar()
+        self.varTtotal.set( self.janela_principal.tTotal)
+        
         self.entryTtotal = tk.Entry(self.window2, background = "white", textvariable = self.varTtotal)
         self.entryTtotal.grid(row = 4, column = 2)
 
@@ -245,6 +252,8 @@ class Form1D_window():
         self.labelDeltaT.grid(row = 5, column = 1,sticky = "w")
 
         self.varDeltaT = tk.IntVar()
+        self.varDeltaT.set( self.janela_principal.deltaT)
+
         self.entryDeltaT = tk.Entry(self.window2, background = "white", textvariable = self.varDeltaT)
         self.entryDeltaT.grid(row = 5, column = 2)
 
@@ -289,17 +298,19 @@ class Form2D_window():
         self.labelComprimento.configure(text = "Comprimento:")
         self.labelComprimento.grid(row = 0, column = 1, sticky = "w")
 
-
         self.varComprimento = tk.IntVar()
+        self.varComprimento.set( self.janela_principal.comprimento)
         self.entryComprimento = tk.Entry(self.window3, background = "white", textvariable = self.varComprimento)
         self.entryComprimento.grid(row = 0, column = 2)
-
+        
 
         self.labelCondInicial = tk.Label(self.window3)
         self.labelCondInicial.configure(text = "CondInicial:")
         self.labelCondInicial.grid(row = 1, column = 1, sticky = "w")
 
         self.varCondInicial = tk.IntVar()
+        self.varCondInicial.set( self.janela_principal.condInicial)
+        
         self.entryCondInicial = tk.Entry(self.window3, background = "white", textvariable = self.varCondInicial)
         self.entryCondInicial.grid(row = 1, column = 2)
 
@@ -308,7 +319,10 @@ class Form2D_window():
         self.labelNpontos.configure(text = "N pontos:")
         self.labelNpontos.grid(row = 2, column = 1, sticky = "w")
 
+        print(self.janela_principal.Npontos)
         self.varNpontos = tk.IntVar()
+        self.varNpontos.set( self.janela_principal.Npontos)
+        
         self.entryNpontos = tk.Entry(self.window3, background = "white", textvariable = self.varNpontos)
         self.entryNpontos.grid(row = 2, column = 2)
 
@@ -320,6 +334,8 @@ class Form2D_window():
         self.labelAlfa.grid(row = 3, column = 1,sticky = "w" )
 
         self.varAlfa = tk.IntVar()
+        self.varAlfa.set( self.janela_principal.alfa)
+        
         self.entryAlfa = tk.Entry(self.window3, background = "white", textvariable = self.varAlfa)
         self.entryAlfa.grid(row = 3, column = 2)
 
@@ -329,6 +345,8 @@ class Form2D_window():
         self.labelTtotal.grid(row = 4, column = 1,sticky = "w")
 
         self.varTtotal = tk.IntVar()
+        self.varTtotal.set( self.janela_principal.tTotal)
+        
         self.entryTtotal = tk.Entry(self.window3, background = "white", textvariable = self.varTtotal)
         self.entryTtotal.grid(row = 4, column = 2)
 
@@ -338,6 +356,8 @@ class Form2D_window():
         self.labelDeltaT.grid(row = 5, column = 1,sticky = "w")
 
         self.varDeltaT = tk.IntVar()
+        self.varDeltaT.set( self.janela_principal.deltaT)
+       
         self.entryDeltaT = tk.Entry(self.window3, background = "white", textvariable = self.varDeltaT)
         self.entryDeltaT.grid(row = 5, column = 2)
 
@@ -348,6 +368,8 @@ class Form2D_window():
         self.labelA1.grid(row = 6, column = 1,sticky = "w")
 
         self.varA1 = tk.IntVar()
+        self.varA1.set( self.janela_principal.tA1)
+       
         self.entryA1 = tk.Entry(self.window3, background = "white", textvariable = self.varA1)
         self.entryA1.grid(row = 6, column = 2)
 
@@ -356,6 +378,8 @@ class Form2D_window():
         self.labelA2.grid(row = 7, column = 1,sticky = "w")
 
         self.varA2 = tk.IntVar()
+        self.varA2.set( self.janela_principal.tA2)
+       
         self.entryA2 = tk.Entry(self.window3, background = "white", textvariable = self.varA2)
         self.entryA2.grid(row = 7, column = 2)
 
@@ -364,6 +388,8 @@ class Form2D_window():
         self.labelA3.grid(row = 8, column = 1,sticky = "w")
 
         self.varA3 = tk.IntVar()
+        self.varA3.set( self.janela_principal.tA3)
+       
         self.entryA3 = tk.Entry(self.window3, background = "white", textvariable = self.varA3)
         self.entryA3.grid(row = 8, column = 2)
 
@@ -372,6 +398,8 @@ class Form2D_window():
         self.labelA4.grid(row = 9, column = 1,sticky = "w")
 
         self.varA4 = tk.IntVar()
+        self.varA4.set( self.janela_principal.tA4)
+       
         self.entryA4 = tk.Entry(self.window3, background = "white", textvariable = self.varA4)
         self.entryA4.grid(row = 9, column = 2)
 
