@@ -1,6 +1,6 @@
 class ArquivoTXT():
 
-    def __init__(self, tipo, alfa, Npontos, tTotal, condInicial, comprimento,deltaT, tA1, tA2, tA3, tA4, filename):
+    def __init__(self, tipo, alfa, Npontos, tTotal, condInicial, comprimento,deltaT, tA1, tA2, tA3, tA4, filename,tolerancia):
         self.tipo = tipo
         self.alfa = alfa
         self.Npontos = Npontos
@@ -12,6 +12,7 @@ class ArquivoTXT():
         self.tA2 = tA2
         self.tA3 = tA3
         self.tA4 = tA4
+        self.tolerancia = tolerancia
         
         
         self.criarTXT(filename)
@@ -42,17 +43,19 @@ class ArquivoTXT():
         arq.write(str(self.deltaT) + "\n")
         
         if(self.tipo == 2):
-            arq.write("*TEMPERATURA_A1\n")
+            arq.write("\n*TEMPERATURA_A1\n")
             arq.write(str(self.tA1) + "\n")
         
-
-            arq.write("*TEMPERATURA_A2\n")
+            arq.write("\n*TEMPERATURA_A2\n")
             arq.write(str(self.tA2) + "\n")
         
-            arq.write("*TEMPERATURA_A3\n")
+            arq.write("\n*TEMPERATURA_A3\n")
             arq.write(str(self.tA3) + "\n")
         
-            arq.write("*TEMPERATURA_A4\n")
+            arq.write("\n*TEMPERATURA_A4\n")
             arq.write(str(self.tA4) + "\n")
+
+            arq.write("\n*TOLERANCIA\n")
+            arq.write(str(self.tolerancia) + "\n")
         
         arq.close()

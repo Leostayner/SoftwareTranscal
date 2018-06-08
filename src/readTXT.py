@@ -11,9 +11,11 @@ class ArquivoTXT():
         self.tA2 = 0
         self.tA3 = 0
         self.tA4 = 0
+        self.tolerancia = 0
         
         self.lerArquivo(nome)
         self.status()
+        
         
     def lerArquivo(self, nome):
         arquivo = open(nome, "r")
@@ -34,7 +36,7 @@ class ArquivoTXT():
                         self.tipo = int(linha)
                      
                     elif(flag == "*ALFA"):
-                        self.alfa = int(linha)
+                        self.alfa = float(linha)
                     
                     elif(flag == "*NUMERO_PONTOS"):
                         self.Npontos = int(linha)
@@ -43,29 +45,33 @@ class ArquivoTXT():
                         self.tTotal = int(linha)
 
                     elif(flag == "*CONDICAO_INICIAL"):
-                        self.condInicial = int(linha)
+                        self.condInicial = float(linha)
                     
                     elif(flag == "*COMPRIMENTO"):
                         self.comprimento = int(linha)
                     
                     elif(flag == "*DELTA_T"):
-                        self.deltaT = int(linha)
+                        self.deltaT = float(linha)
 
                     
                     elif(self.tipo == 2):
                         
                         if(flag == "*TEMPERATURA_A1"):
-                           self.tA1 = int(linha)
+                           self.tA1 = float(linha)
                            
                         elif(flag == "*TEMPERATURA_A2"):
-                            self.tA2 = int(linha)
+                            self.tA2 = float(linha)
                         
                         elif(flag == "*TEMPERATURA_A3"):
-                            self.tA3 = int(linha)
+                            self.tA3 = float(linha)
 
                         elif(flag == "*TEMPERATURA_A4"):
-                            self.tA4 = int(linha)                    
+                            self.tA4 = float(linha)                    
+                        
+                        elif(flag == "*TOLERANCIA"):
+                            self.tolerancia = float(linha)                    
                 
+
         arquivo.close()
 
     def status(self):

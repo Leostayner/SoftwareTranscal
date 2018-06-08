@@ -26,7 +26,7 @@ class Janela_Principal():
                                                   self.app_config['window_xpos'], 
                                                   self.app_config['window_ypos']))
         self.window.title("TransCal")
-        self.window.resizable(False, False)
+        #self.window.resizable(False, False)
     
         #Geometria da pagina
         self.window.rowconfigure(0, minsize = window_height)
@@ -45,6 +45,7 @@ class Janela_Principal():
         self.tA2            = 0
         self.tA3            = 0
         self.tA4            = 0
+        self.tolerancia     = 0.01
 
         #Menu
         menubar = tk.Menu(self.window)
@@ -79,17 +80,18 @@ class Janela_Principal():
         self.fileName = filedialog.askopenfilename(filetypes=(("text files", "*.txt"), ("all files", "*.*")))
 
         read = readTXT.ArquivoTXT(self.fileName)
-        self.tipo = read.tipo
-        self.alfa = read.alfa
-        self.Npontos = read.Npontos
-        self.tTotal = read.tTotal
-        self.condInicial = read.condInicial
-        self.comprimento = read.comprimento
-        self.deltaT = read.deltaT
-        self.tA1 = read.tA1
-        self.tA2 = read.tA2
-        self.tA3 = read.tA3
-        self.tA4 = read.tA4
+        self.tipo           = read.tipo
+        self.alfa           = read.alfa
+        self.Npontos        = read.Npontos
+        self.tTotal         = read.tTotal
+        self.condInicial    = read.condInicial
+        self.comprimento    = read.comprimento
+        self.deltaT         = read.deltaT
+        self.tA1            = read.tA1
+        self.tA2            = read.tA2
+        self.tA3            = read.tA3
+        self.tA4            = read.tA4
+        self.tolerancia     = read.tolerancia
 
         if(self.tipo == 1):
             self.mostrar_form1D()
@@ -104,7 +106,7 @@ class Janela_Principal():
                            self.tTotal, self.condInicial,
                            self.comprimento, self.deltaT,
                            self.tA1, self.tA2,
-                           self.tA3, self.tA4)
+                           self.tA3, self.tA4,self.tolerancia)
    
     def saveFile(self):
         if (self.fileName == ""):
@@ -115,7 +117,7 @@ class Janela_Principal():
                             self.tTotal, self.condInicial,
                             self.comprimento, self.deltaT,
                             self.tA1, self.tA2,
-                            self.tA3, self.tA4,self.fileName)
+                            self.tA3, self.tA4, self.fileName, self.tolerancia)
         
     def saveAsFile(self):
         self.fileName = filedialog.asksaveasfilename(defaultextension=".txt")
@@ -123,7 +125,7 @@ class Janela_Principal():
                             self.tTotal, self.condInicial,
                             self.comprimento, self.deltaT,
                             self.tA1, self.tA2,
-                            self.tA3, self.tA4,self.fileName)
+                            self.tA3, self.tA4,self.fileName, self.tolerancia)
 
     def mostrar_form1D(self):
         self.form1D_window = Form1D_window(self)
@@ -173,21 +175,13 @@ class Form1D_window():
         self.window2.grid(row = 0, column = 0, sticky = "nsew")
         #self.window2 = tk.Tk()
         
-        self.window2.columnconfigure(0, minsize = (self.janela_principal.app_config['width'] / 2) )
-        self.window2.columnconfigure(1, minsize = (self.janela_principal.app_config['width'] / 4) )
-        self.window2.columnconfigure(2, minsize = (self.janela_principal.app_config['width'] / 4) )
-        
-        '''
-        self.window2.rowconfigure(0, minsize = (self.janela_principal.app_config['height'] /7  ) )
-        self.window2.rowconfigure(1, minsize = (self.janela_principal.app_config['height'] /7  ) )
-        self.window2.rowconfigure(2, minsize = (self.janela_principal.app_config['height'] /7  ) )
-        self.window2.rowconfigure(3, minsize = (self.janela_principal.app_config['height'] /7  ) )
-        self.window2.rowconfigure(4, minsize = (self.janela_principal.app_config['height'] /7  ) )
-        self.window2.rowconfigure(5, minsize = (self.janela_principal.app_config['height'] /7  ) )
-        self.window2.rowconfigure(6, minsize = (self.janela_principal.app_config['height'] /7  ) )
-        '''
-        
+        self.window2.columnconfigure(0, minsize = (self.janela_principal.app_config['width'] / 2) + 20 )
+        self.window2.columnconfigure(1, minsize = (self.janela_principal.app_config['width'] / 8) )
+        self.window2.columnconfigure(2, minsize = (self.janela_principal.app_config['width'] / 8) )
+        self.window2.columnconfigure(3, minsize = (self.janela_principal.app_config['width'] / 4) )
 
+
+        #Comprimento
         self.labelComprimento = tk.Label(self.window2)
         self.labelComprimento.configure(text = "Comprimento:")
         self.labelComprimento.grid(row = 0, column = 1, sticky = "w")
@@ -195,67 +189,85 @@ class Form1D_window():
 
         self.varComprimento = tk.IntVar()
         self.varComprimento.set( self.janela_principal.comprimento)
-
         self.entryComprimento = tk.Entry(self.window2, background = "white", textvariable = self.varComprimento)
         self.entryComprimento.grid(row = 0, column = 2)
 
+        self.labelComprimentoSimbol = tk.Label(self.window2)
+        self.labelComprimentoSimbol.configure(text = "cm")
+        self.labelComprimentoSimbol.grid(row = 0, column = 3, sticky = "w")
 
+        #CondiInicial
         self.labelCondInicial = tk.Label(self.window2)
         self.labelCondInicial.configure(text = "CondInicial:")
         self.labelCondInicial.grid(row = 1, column = 1, sticky = "w")
 
-        self.varCondInicial = tk.IntVar()
+        self.varCondInicial = tk.DoubleVar()
         self.varCondInicial.set( self.janela_principal.condInicial)
-
         self.entryCondInicial = tk.Entry(self.window2, background = "white", textvariable = self.varCondInicial)
         self.entryCondInicial.grid(row = 1, column = 2)
 
+        
+        self.labelCondInicialSimbol = tk.Label(self.window2)
+        self.labelCondInicialSimbol.configure(text = "ºC")
+        self.labelCondInicialSimbol.grid(row = 1, column = 3, sticky = "w")
 
+
+        #Numero Pontos
         self.labelNpontos = tk.Label(self.window2)
         self.labelNpontos.configure(text = "N pontos:")
         self.labelNpontos.grid(row = 2, column = 1, sticky = "w")
 
         self.varNpontos = tk.IntVar()
         self.varNpontos.set( self.janela_principal.Npontos)
-
         self.entryNpontos = tk.Entry(self.window2, background = "white", textvariable = self.varNpontos)
         self.entryNpontos.grid(row = 2, column = 2)
+        
 
-
-
-
+        #Alfa
         self.labelAlfa = tk.Label(self.window2)
         self.labelAlfa.configure(text = "Alfa:")
         self.labelAlfa.grid(row = 3, column = 1,sticky = "w" )
 
-        self.varAlfa = tk.IntVar()
+        self.varAlfa = tk.DoubleVar()
         self.varAlfa.set( self.janela_principal.alfa)
-
         self.entryAlfa = tk.Entry(self.window2, background = "white", textvariable = self.varAlfa)
         self.entryAlfa.grid(row = 3, column = 2)
-
         
+        self.labelAlfaSimbol = tk.Label(self.window2)
+        self.labelAlfaSimbol.configure(text = "Kcal/m²")
+        self.labelAlfaSimbol.grid(row = 3, column = 3,sticky = "w" )
+
+
+        #Tempo total
         self.labelTtotal = tk.Label(self.window2)
         self.labelTtotal.configure(text = "T Total:")
         self.labelTtotal.grid(row = 4, column = 1,sticky = "w")
 
         self.varTtotal = tk.IntVar()
         self.varTtotal.set( self.janela_principal.tTotal)
-        
         self.entryTtotal = tk.Entry(self.window2, background = "white", textvariable = self.varTtotal)
         self.entryTtotal.grid(row = 4, column = 2)
 
+        self.labelTtotalSimbol = tk.Label(self.window2)
+        self.labelTtotalSimbol.configure(text = "seg")
+        self.labelTtotalSimbol.grid(row = 4, column = 3,sticky = "w")
 
 
+        #Delta T
         self.labelDeltaT = tk.Label(self.window2)
         self.labelDeltaT.configure(text = "Delta T:")
         self.labelDeltaT.grid(row = 5, column = 1,sticky = "w")
 
-        self.varDeltaT = tk.IntVar()
+        self.varDeltaT = tk.DoubleVar()
         self.varDeltaT.set( self.janela_principal.deltaT)
-
         self.entryDeltaT = tk.Entry(self.window2, background = "white", textvariable = self.varDeltaT)
         self.entryDeltaT.grid(row = 5, column = 2)
+
+        
+        self.labelDeltaTSimbol = tk.Label(self.window2)
+        self.labelDeltaTSimbol.configure(text = "seg")
+        self.labelDeltaTSimbol.grid(row = 5, column = 3,sticky = "w")
+
 
         self.buttonConfimar = tk.Button(self.window2)
         self.buttonConfimar.configure(text = "Confirmar",command = self.confirmar)
@@ -290,10 +302,11 @@ class Form2D_window():
         
         
         self.window3.columnconfigure(0, minsize = (self.janela_principal.app_config['width'] / 2) )
-        self.window3.columnconfigure(1, minsize = (self.janela_principal.app_config['width'] / 4) )
-        self.window3.columnconfigure(2, minsize = (self.janela_principal.app_config['width'] / 4) )
+        self.window3.columnconfigure(1, minsize = (self.janela_principal.app_config['width'] / 3) )
+        self.window3.columnconfigure(2, minsize = (self.janela_principal.app_config['width'] / 3) )
+        self.window3.columnconfigure(3, minsize = (self.janela_principal.app_config['width'] / 2) )
         
-
+        #Comprimento
         self.labelComprimento = tk.Label(self.window3)
         self.labelComprimento.configure(text = "Comprimento:")
         self.labelComprimento.grid(row = 0, column = 1, sticky = "w")
@@ -303,110 +316,150 @@ class Form2D_window():
         self.entryComprimento = tk.Entry(self.window3, background = "white", textvariable = self.varComprimento)
         self.entryComprimento.grid(row = 0, column = 2)
         
+        self.labelComprimentoSimbol = tk.Label(self.window3)
+        self.labelComprimentoSimbol.configure(text = "cm")
+        self.labelComprimentoSimbol.grid(row = 0, column = 3, sticky = "w")
 
+      
+        #Condiçao Inicial
         self.labelCondInicial = tk.Label(self.window3)
         self.labelCondInicial.configure(text = "CondInicial:")
         self.labelCondInicial.grid(row = 1, column = 1, sticky = "w")
 
-        self.varCondInicial = tk.IntVar()
-        self.varCondInicial.set( self.janela_principal.condInicial)
-        
+        self.varCondInicial = tk.DoubleVar()
+        self.varCondInicial.set( self.janela_principal.condInicial)    
         self.entryCondInicial = tk.Entry(self.window3, background = "white", textvariable = self.varCondInicial)
         self.entryCondInicial.grid(row = 1, column = 2)
 
+        self.labelCondInicialSimbol = tk.Label(self.window3)
+        self.labelCondInicialSimbol.configure(text = "ºC")
+        self.labelCondInicialSimbol.grid(row = 1, column = 3, sticky = "w")
 
+
+        #Numero Pontos
         self.labelNpontos = tk.Label(self.window3)
         self.labelNpontos.configure(text = "N pontos:")
         self.labelNpontos.grid(row = 2, column = 1, sticky = "w")
 
-        print(self.janela_principal.Npontos)
         self.varNpontos = tk.IntVar()
         self.varNpontos.set( self.janela_principal.Npontos)
-        
         self.entryNpontos = tk.Entry(self.window3, background = "white", textvariable = self.varNpontos)
         self.entryNpontos.grid(row = 2, column = 2)
 
 
 
-
+        #Alfa
         self.labelAlfa = tk.Label(self.window3)
         self.labelAlfa.configure(text = "Alfa:")
         self.labelAlfa.grid(row = 3, column = 1,sticky = "w" )
 
-        self.varAlfa = tk.IntVar()
+        self.varAlfa = tk.DoubleVar()
         self.varAlfa.set( self.janela_principal.alfa)
-        
         self.entryAlfa = tk.Entry(self.window3, background = "white", textvariable = self.varAlfa)
         self.entryAlfa.grid(row = 3, column = 2)
 
+        self.labelAlfaSimbol = tk.Label(self.window3)
+        self.labelAlfaSimbol.configure(text = "Kcal/m²")
+        self.labelAlfaSimbol.grid(row = 3, column = 3,sticky = "w" )
 
+        #Tempo Total
         self.labelTtotal = tk.Label(self.window3)
         self.labelTtotal.configure(text = "T Total:")
         self.labelTtotal.grid(row = 4, column = 1,sticky = "w")
 
         self.varTtotal = tk.IntVar()
         self.varTtotal.set( self.janela_principal.tTotal)
-        
         self.entryTtotal = tk.Entry(self.window3, background = "white", textvariable = self.varTtotal)
         self.entryTtotal.grid(row = 4, column = 2)
+
+        self.labelTtotalSimbol = tk.Label(self.window3)
+        self.labelTtotalSimbol.configure(text = "seg")
+        self.labelTtotalSimbol.grid(row = 4, column = 3,sticky = "w")
+
 
 
         self.labelDeltaT = tk.Label(self.window3)
         self.labelDeltaT.configure(text = "Delta T:")
         self.labelDeltaT.grid(row = 5, column = 1,sticky = "w")
 
-        self.varDeltaT = tk.IntVar()
+        self.varDeltaT = tk.DoubleVar()
         self.varDeltaT.set( self.janela_principal.deltaT)
-       
         self.entryDeltaT = tk.Entry(self.window3, background = "white", textvariable = self.varDeltaT)
         self.entryDeltaT.grid(row = 5, column = 2)
 
+        self.labelDeltaTSimbol = tk.Label(self.window3)
+        self.labelDeltaTSimbol.configure(text = "seg")
+        self.labelDeltaTSimbol.grid(row = 5, column = 3,sticky = "w")
 
-
+        #A1
         self.labelA1 = tk.Label(self.window3)
         self.labelA1.configure(text = "T A1:")
         self.labelA1.grid(row = 6, column = 1,sticky = "w")
 
-        self.varA1 = tk.IntVar()
+        self.varA1 = tk.DoubleVar()
         self.varA1.set( self.janela_principal.tA1)
-       
         self.entryA1 = tk.Entry(self.window3, background = "white", textvariable = self.varA1)
         self.entryA1.grid(row = 6, column = 2)
 
+        self.labelA1Simbol = tk.Label(self.window3)
+        self.labelA1Simbol.configure(text = "ºC")
+        self.labelA1Simbol.grid(row = 6, column = 3,sticky = "w")
+
+        #A2
         self.labelA2 = tk.Label(self.window3)
         self.labelA2.configure(text = "T A2:")
         self.labelA2.grid(row = 7, column = 1,sticky = "w")
 
-        self.varA2 = tk.IntVar()
+        self.varA2 = tk.DoubleVar()
         self.varA2.set( self.janela_principal.tA2)
-       
         self.entryA2 = tk.Entry(self.window3, background = "white", textvariable = self.varA2)
         self.entryA2.grid(row = 7, column = 2)
 
+        self.labelA2Simbol = tk.Label(self.window3)
+        self.labelA2Simbol.configure(text = "ºC")
+        self.labelA2Simbol.grid(row = 7, column = 3,sticky = "w")
+
+        #A3
         self.labelA3 = tk.Label(self.window3)
         self.labelA3.configure(text = "T A3:")
         self.labelA3.grid(row = 8, column = 1,sticky = "w")
 
-        self.varA3 = tk.IntVar()
+        self.varA3 = tk.DoubleVar()
         self.varA3.set( self.janela_principal.tA3)
-       
         self.entryA3 = tk.Entry(self.window3, background = "white", textvariable = self.varA3)
         self.entryA3.grid(row = 8, column = 2)
 
+        self.labelA3Simbol = tk.Label(self.window3)
+        self.labelA3Simbol.configure(text = "ºC")
+        self.labelA3Simbol.grid(row = 8, column = 3,sticky = "w")
+
+        #A4
         self.labelA4 = tk.Label(self.window3)
         self.labelA4.configure(text = "T A4:")
         self.labelA4.grid(row = 9, column = 1,sticky = "w")
 
-        self.varA4 = tk.IntVar()
+        self.varA4 = tk.DoubleVar()
         self.varA4.set( self.janela_principal.tA4)
-       
         self.entryA4 = tk.Entry(self.window3, background = "white", textvariable = self.varA4)
         self.entryA4.grid(row = 9, column = 2)
 
+        self.labelA4Simbol = tk.Label(self.window3)
+        self.labelA4Simbol.configure(text = "ºC2")
+        self.labelA4Simbol.grid(row = 9, column = 3,sticky = "w")
+
+        #Tolerancia
+        self.labelTolerancia = tk.Label(self.window3)
+        self.labelTolerancia.configure(text = "Tolerancia:")
+        self.labelTolerancia.grid(row = 10, column = 1,sticky = "w")
+
+        self.varTolerancia = tk.DoubleVar()
+        self.varTolerancia.set( self.janela_principal.tolerancia)
+        self.entryTolerancia = tk.Entry(self.window3, background = "white", textvariable = self.varTolerancia)
+        self.entryTolerancia.grid(row = 10, column = 2)
 
         self.buttonConfimar = tk.Button(self.window3)
         self.buttonConfimar.configure(text = "Confirmar",command = self.confirmar)
-        self.buttonConfimar.grid(row = 10, column  = 1, columnspan = 2, sticky = "nsew")
+        self.buttonConfimar.grid(row = 11, column  = 1, columnspan = 2, sticky = "nsew")
 
 
 
@@ -417,16 +470,18 @@ class Form2D_window():
         self.janela_principal.condInicial   = self.varCondInicial.get()
         self.janela_principal.comprimento   = self.varComprimento.get()
         self.janela_principal.deltaT        = self.varDeltaT.get()
-        self.janela_principal.tA1            = self.varA1.get()
-        self.janela_principal.tA2            = self.varA2.get()
-        self.janela_principal.tA3            = self.varA3.get()
-        self.janela_principal.tA4            = self.varA4.get()
+        self.janela_principal.tA1           = self.varA1.get()
+        self.janela_principal.tA2           = self.varA2.get()
+        self.janela_principal.tA3           = self.varA3.get()
+        self.janela_principal.tA4           = self.varA4.get()
+        self.janela_principal.tolerancia    = self.varTolerancia.get()
+    
 
         main2D.Main_2D(self.janela_principal.alfa, self.janela_principal.Npontos, 
                      self.janela_principal.tTotal, self.janela_principal.condInicial,
                      self.janela_principal.comprimento, self.janela_principal.deltaT,
                      self.janela_principal.tA1, self.janela_principal.tA2,
-                     self.janela_principal.tA3, self.janela_principal.tA4)
+                     self.janela_principal.tA3, self.janela_principal.tA4,self.janela_principal.tolerancia)
 
 
     def mostrar(self):
