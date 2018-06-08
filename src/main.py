@@ -2,6 +2,7 @@ from matplotlib.widgets import Slider
 import matplotlib.pyplot as plt
 import numpy as np
 import readTXT
+from tkinter import messagebox
 
 class Main_1D():
 
@@ -26,8 +27,8 @@ class Main_1D():
         
 
         if (self.fourier > 0.5):
-            print("Sem solucao para o sistema")
-            return
+            messagebox.showerror("Error","Sistema Sem Solução")
+            return 1
 
         for i in range(self.tTotal):
             
@@ -77,7 +78,7 @@ class Main_1D():
         
         plt.subplots_adjust(left=0.25, bottom=0.25)
         self.plotLabel, = plt.plot(self.posicao, self.temperatura, lw=2, color='red')
-       
+        plt.ylim((0,self.condInicial + 20))
         pos = plt.axes([0.25, 0.15, 0.65, 0.03])
         mySlider = Slider(pos, 'Tempo', 1, self.tTotal, valinit = self.tTotal, valstep = 1, valfmt='%1d')        
     
@@ -93,6 +94,7 @@ class Main_1D():
         self.fig.canvas.draw_idle()
 
     def main(self):
-        self.calcular()
+        if(self.calcular()):
+            return
         self.myplot()
         

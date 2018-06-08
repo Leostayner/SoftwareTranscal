@@ -1,20 +1,20 @@
 class ArquivoTXT():
 
     def __init__(self, nome):
-        self.alfa = 0
+        self.alfa = 0.0
         self.Npontos = 0
         self.tTotal = 0
-        self.condInicial = 0
+        self.condInicial = 0.0
         self.comprimento = 0
-        self.deltaT = 0
-        self.tA1 = 0
-        self.tA2 = 0
-        self.tA3 = 0
-        self.tA4 = 0
-        self.tolerancia = 0
+        self.deltaT = 0.0
+        self.tA1 = 0.0
+        self.tA2 = 0.0
+        self.tA3 = 0.0
+        self.tA4 = 0.0
+        self.tolerancia = 0.0
         
         self.lerArquivo(nome)
-        self.status()
+        #self.status()
         
         
     def lerArquivo(self, nome):

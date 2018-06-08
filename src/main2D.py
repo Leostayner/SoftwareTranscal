@@ -3,6 +3,8 @@ import numpy as np
 from matplotlib.widgets import Slider
 import tkinter as tk
 from tkinter import messagebox
+import time
+
 
 class Main_2D():
 
@@ -31,8 +33,11 @@ class Main_2D():
         self.temperatura2 = self.criar_matriz_T(self.A1, self.A2, self.A3, self.A4)
         self.temperatura = self.criar_matriz_T(self.A1, self.A2, self.A3, self.A4)
         self.fourier = self.numeroFourier()
+        self.status()
 
-        self.main()
+        self.tempo =  0
+
+        self.main() 
 
 
     def numeroFourier(self):
@@ -58,6 +63,9 @@ class Main_2D():
             messagebox.showerror("Error","Sistema Sem Solução")
             return 1
 
+        tempoInicial = time.time()
+
+
         for t in range(self.tTotal):
             for i in range(0, self.Npontos - 1):
                 for j in range(0, self.Npontos - 1):
@@ -77,19 +85,28 @@ class Main_2D():
                         erro = 0
                     
                     else:
-                        erro = (self.temperatura2[i][j] - self.temperatura[i][j]) / self.temperatura2[i][j]
+                        erro = float((self.temperatura2[i][j] - self.temperatura[i][j]) / self.temperatura2[i][j])
                           
-                    if(erro > max):
-                        max = erro
+                    if(float(erro) > float(max)):
+                        max = float(erro)
 
 
                         
             self.temperatura = self.temperatura2[:][:]
             self.temperatura2 = self.criar_matriz_T(self.A1, self.A2, self.A3, self.A4)
-            if( (max < self.tolerancia) and (max != 0) ):
+            
+          
+            if( (float(max) < float(self.tolerancia)) and (max != 0.0) ):
                 if(self.intValue == 0):
                     messagebox.showwarning("Warning","Sistema Convergiu")
-                break
+                return
+        
+        tempoFinal = time.time()
+        self.tempo =  tempoFinal - tempoInicial
+        print("Tempo de Execução: ", self.tempo)
+
+
+    
     def myplot(self):
         self.fig, self.ax = plt.subplots()
 
@@ -115,3 +132,17 @@ class Main_2D():
         if(self.calcular()):
             return
         self.myplot()
+
+    def status(self):
+        print("Alfa: {0} ".format(self.alfa))
+        print("Numero de Pontos: {0}".format(self.Npontos))
+        print("Tempo Total: {0}".format(self.tTotal))
+        print("Condição Inicial: {0}".format(self.condInicial))
+        print("Comprimento: {0}".format(self.comprimento))
+        print("DeltaT: {0}".format(self.delta_T))
+        print("Temperatura A1: {0}".format(self.A1))
+        print("Temperatura A2: {0}".format(self.A2))
+        print("Temperatura A3: {0}".format(self.A3))
+        print("Temperatura A4: {0}".format(self.A4))
+        print("Tolerancia: {0}".format(self.tolerancia))
+        
