@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import tkinter as tk
 from tkinter import font
 from tkinter import filedialog
@@ -202,7 +203,7 @@ class Form1D_window():
 
         #CondiInicial
         self.labelCondInicial = tk.Label(self.window2)
-        self.labelCondInicial.configure(text = "Condição Inicial : ", font = self.font)
+        self.labelCondInicial.configure(text = "Condicao Inicial : ", font = self.font)
         self.labelCondInicial.grid(row = 1, column = 1, sticky = "w")
 
         self.varCondInicial = tk.DoubleVar()
