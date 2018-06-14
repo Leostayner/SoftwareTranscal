@@ -56,7 +56,7 @@ class Main_2D():
 
     def calcular(self):
         self.temperatura = self.criar_matriz_T(self.A1, self.A2, self.A3, self.A4)
-        max = 0
+        maximo = 0.0
 
         # Verifica Se há solução para o sistema
         if (self.fourier > 0.5):
@@ -66,7 +66,7 @@ class Main_2D():
         tempoInicial = time.time()
 
 
-        for t in range(self.tTotal):
+        for t in range(int(self.tTotal / self.delta_T)):
             for i in range(0, self.Npontos - 1):
                 for j in range(0, self.Npontos - 1):
 
@@ -80,23 +80,25 @@ class Main_2D():
                         self.temperatura2[i][j]= (temp)
 
                     #Verificação da Tolerancia
+                    
 
                     if(self.temperatura2[i][j] == 0):
-                        erro = 0
-                    
+                        erro = 0.0
+                            
                     else:
-                        erro = float((self.temperatura2[i][j] - self.temperatura[i][j]) / self.temperatura2[i][j])
-                          
-                    if(float(erro) > float(max)):
-                        max = float(erro)
-
-
+                        erro = (float(self.temperatura2[i][j]) - float(self.temperatura[i][j])) / float(self.temperatura2[i][j])
+                        if(erro == 1.0):
+                            erro = 0.0               
+                
+                    if(float(erro) > float(maximo)):
+                        print("quem eh este pokemon {0} {1} ERRO{2} maximo{3} \n".format(i,j, erro, maximo))
+                        maximo = float(erro)
                         
             self.temperatura = self.temperatura2[:][:]
             self.temperatura2 = self.criar_matriz_T(self.A1, self.A2, self.A3, self.A4)
             
-          
-            if( (float(max) < float(self.tolerancia)) and (max != 0.0) ):
+
+            if( (float(maximo) < float(self.tolerancia)) and (maximo != 0.0) ):
                 if(self.intValue == 0):
                     messagebox.showwarning("Warning","Sistema Convergiu")
                 return
@@ -110,11 +112,14 @@ class Main_2D():
     def myplot(self):
         self.fig, self.ax = plt.subplots()
 
-        plt.subplots_adjust(left=0.25, bottom=0.25)
+        plt.subplots_adjust(left=0.25, bottom=0.35)
         self.plotLabel = plt.imshow(self.temperatura)
+        self.ax.set_xlabel('Posição X (cm)')
+        self.ax.set_ylabel('Posição y (cm)')
+
 
         pos = plt.axes([0.25, 0.15, 0.65, 0.03])
-        mySlider = Slider(pos, 'Tempo', 1, self.tTotal, valinit = self.tTotal, valstep = 1, valfmt='%1d')
+        mySlider = Slider(pos, 'Tempo', 1, (self.tTotal / self.delta_T), valinit = self.tTotal / self.delta_T, valstep = 1, valfmt='%1d')
 
         mySlider.on_changed(self.update)
         plt.show()

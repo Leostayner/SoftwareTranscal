@@ -229,7 +229,7 @@ class Form1D_window():
 
         #Alfa
         self.labelAlfa = tk.Label(self.window2)
-        self.labelAlfa.configure(text = "Alfa : ", font = self.font)
+        self.labelAlfa.configure(text = "Difusidade Termica : ", font = self.font)
         self.labelAlfa.grid(row = 3, column = 1,sticky = "w" )
 
         self.varAlfa = tk.DoubleVar()
@@ -259,7 +259,7 @@ class Form1D_window():
 
         #Delta T
         self.labelDeltaT = tk.Label(self.window2)
-        self.labelDeltaT.configure(text = "Delta T : ", font = self.font)
+        self.labelDeltaT.configure(text = "Intervalo de Tempo : ", font = self.font)
         self.labelDeltaT.grid(row = 5, column = 1,sticky = "w")
 
         self.varDeltaT = tk.DoubleVar()
@@ -357,7 +357,7 @@ class Form2D_window():
 
         #Alfa
         self.labelAlfa = tk.Label(self.window3)
-        self.labelAlfa.configure(text = "Alfa : ", font = self.font)
+        self.labelAlfa.configure(text = "Difusidade Termica : ", font = self.font)
         self.labelAlfa.grid(row = 3, column = 1,sticky = "w" )
 
         self.varAlfa = tk.DoubleVar()
@@ -386,7 +386,7 @@ class Form2D_window():
 
 
         self.labelDeltaT = tk.Label(self.window3)
-        self.labelDeltaT.configure(text = "Delta T : ", font = self.font)
+        self.labelDeltaT.configure(text = "Intervalo de Tempo : ", font = self.font)
         self.labelDeltaT.grid(row = 5, column = 1,sticky = "w")
 
         self.varDeltaT = tk.DoubleVar()
@@ -451,7 +451,7 @@ class Form2D_window():
         self.entryA4.grid(row = 9, column = 2)
 
         self.labelA4Simbol = tk.Label(self.window3)
-        self.labelA4Simbol.configure(text = "ºC2", font = self.font)
+        self.labelA4Simbol.configure(text = "ºC", font = self.font)
         self.labelA4Simbol.grid(row = 9, column = 3,sticky = "w")
 
         #Tolerancia

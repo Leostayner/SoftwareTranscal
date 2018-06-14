@@ -19,6 +19,8 @@ class Main_1D():
         self.temperaturaTemp = [0]
         self.posicao = self.criar_vetor_P()
         self.fourier = self.numeroFourier()
+        
+        self.status()
 
         self.main()
 
@@ -76,9 +78,12 @@ class Main_1D():
     def myplot(self):        
         self.fig,self.ax = plt.subplots()
         
-        plt.subplots_adjust(left=0.25, bottom=0.25)
+        plt.subplots_adjust(left=0.25, bottom=0.35)
         self.plotLabel, = plt.plot(self.posicao, self.temperatura, lw=2, color='red')
         plt.ylim((0,self.condInicial + 20))
+        self.ax.set_xlabel('Posição (cm)')
+        self.ax.set_ylabel('Temperatura (ºC)')
+
         pos = plt.axes([0.25, 0.15, 0.65, 0.03])
         mySlider = Slider(pos, 'Tempo', 1, self.tTotal, valinit = self.tTotal, valstep = 1, valfmt='%1d')        
     
@@ -93,8 +98,17 @@ class Main_1D():
         self.plotLabel.set_data(self.posicao,self.temperatura)
         self.fig.canvas.draw_idle()
 
+        
     def main(self):
         if(self.calcular()):
             return
         self.myplot()
+
+    def status(self):
+        print("Alfa: {0} ".format(self.alfa))
+        print("Numero de Pontos: {0}".format(self.Npontos))
+        print("Tempo Total: {0}".format(self.tTotal))
+        print("Condição Inicial: {0}".format(self.condInicial))
+        print("Comprimento: {0}".format(self.comprimento))
+        print("DeltaT: {0}".format(self.delta_T))
         
